@@ -132,14 +132,12 @@ public class BookingList {
     }
 
     public String book_by_floor(String flr, String name, int age, RoomList roomList, KeyCardList keyCardList) {
-        boolean check = roomList.checkRoomEmptyWithFloor(flr);
-        if (!check) return "Cannot book floor "+flr+" for "+ name+".";
+        boolean check = roomList.checkFloorIsEmpty(flr);
+        if (!check) return "Cannot book floor "+flr+" for "+ name + ".";
 
-        List<Room> data = roomList.getRoomEmptyWithFloor(flr);
+        List<Room> data = roomList.getEmptyFloor(flr);
         String back = "Room ";
         String card = "";
-
-        System.out.println(data.size());
 
         for (Room r: data) {
             back += r.getRoomName() + ", ";
@@ -153,8 +151,8 @@ public class BookingList {
             add(booking);
         }
 
-//        card = card.substring(0, card.length()-2);
-        back = back + " are booked with keycard number " + card;
+        card = card.substring(0, card.length()-2);
+        back = back.substring(0, back.length()-2) + " are booked with keycard number " + card;
         return back;
     }
 }

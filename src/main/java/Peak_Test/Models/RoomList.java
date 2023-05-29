@@ -37,21 +37,19 @@ public class RoomList {
         return null;
     }
 
-    public boolean checkRoomEmptyWithFloor(String flr) {
-        boolean status = true;
+    public List<Room> getEmptyFloor(String flr) {
+        List<Room> roomList = new ArrayList<Room>();
         for (Room r: rooms) {
-            if (r.getFloor().equals(flr) && r.getStatus() == 0) status = false;
+            if (r.getFloor().equals(flr)) roomList.add(r);
         }
-        return status;
+        return roomList;
     }
 
-    public List<Room> getRoomEmptyWithFloor(String flr) {
-        List<Room> rooms = new ArrayList<Room>();
+    public boolean checkFloorIsEmpty(String flr) {
         for (Room r: rooms) {
-            if (r.getFloor().equals(flr)) {
-                rooms.add(r);
-            }
+            if (r.getFloor().equals(flr) && r.getStatus() == 0) return false;
         }
-        return rooms;
+        return true;
     }
+
 }
