@@ -11,10 +11,6 @@ public class RoomList {
         this.rooms = new ArrayList<Room>();
     }
 
-    public void setRooms(List<Room> roomList) {
-        rooms = roomList;
-    }
-
     public String createRoom(String floor, String room) {
         Room r = new Room(floor, room, 1);
         add(r);
@@ -41,11 +37,21 @@ public class RoomList {
         return null;
     }
 
-    public boolean getRoomEmptyWithFloor(String flr) {
+    public boolean checkRoomEmptyWithFloor(String flr) {
         boolean status = true;
         for (Room r: rooms) {
             if (r.getFloor().equals(flr) && r.getStatus() == 0) status = false;
         }
         return status;
+    }
+
+    public List<Room> getRoomEmptyWithFloor(String flr) {
+        List<Room> rooms = new ArrayList<Room>();
+        for (Room r: rooms) {
+            if (r.getFloor().equals(flr)) {
+                rooms.add(r);
+            }
+        }
+        return rooms;
     }
 }

@@ -14,10 +14,6 @@ public class KeyCardList {
         keyCards.add(keyCard);
     }
 
-    public void setKeyCards(List<KeyCard> keyCardList) {
-        keyCards = keyCardList;
-    }
-
     public KeyCard findStatusEmpty() {
         for (KeyCard k: keyCards) {
             if (k.getStatus() == 1) {

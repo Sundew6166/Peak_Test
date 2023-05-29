@@ -10,10 +10,6 @@ public class BookingList {
         this.bookings = new ArrayList<Booking>();
     }
 
-    public void setBooking(List<Booking> bookingList) {
-        this.bookings = bookingList;
-    }
-
     public void add(Booking booking) {
         bookings.add(booking);
     }
@@ -115,46 +111,50 @@ public class BookingList {
 
     public String checkout_guest_by_floor(String flr, RoomList roomList, KeyCardList keyCardList) {
         String back = "Room ";
+        List<Booking> floor = new ArrayList<Booking>();
         for (Booking b: bookings) {
             if (b.getRoom().getFloor().equals(flr)) {
-                back += b.getRoom().getRoomName() + ", ";
-
-                KeyCard k = keyCardList.findStatusNotEmpty(b.getKeyCard().getCardNum());
-                Room r = roomList.find(b.getRoom().getRoomName());
-
-                remove(b);
-                k.setStatus(1);
-                r.setStatus(1);
+                floor.add(b);
             }
+        }
+        for(Booking b: floor) {
+            back += b.getRoom().getRoomName() + ", ";
+
+            KeyCard k = keyCardList.findStatusNotEmpty(b.getKeyCard().getCardNum());
+            Room r = roomList.find(b.getRoom().getRoomName());
+
+            remove(b);
+            k.setStatus(1);
+            r.setStatus(1);
         }
         back = back.substring(0, back.length()-2);
         return back + " are checkout.";
     }
 
     public String book_by_floor(String flr, String name, int age, RoomList roomList, KeyCardList keyCardList) {
-        boolean check = roomList.getRoomEmptyWithFloor(flr);
+        boolean check = roomList.checkRoomEmptyWithFloor(flr);
         if (!check) return "Cannot book floor "+flr+" for "+ name+".";
 
+        List<Room> data = roomList.getRoomEmptyWithFloor(flr);
         String back = "Room ";
         String card = "";
-        for (Booking b: bookings) {
-            if (b.getRoom().getFloor().equals(flr)) {
-                back += b.getRoom().getRoomName() + ", ";
 
-                KeyCard k = keyCardList.findStatusEmpty();
-                Room r = roomList.find(b.getRoom().getRoomName());
+        System.out.println(data.size());
 
-                card += k.getCardNum() + ", ";
+        for (Room r: data) {
+            back += r.getRoomName() + ", ";
+            KeyCard k = keyCardList.findStatusEmpty();
 
-                r.setStatus(0);
-                k.setStatus(0);
-                Booking booking = new Booking(name, age, r, k);
-                add(booking);
+            card += k.getCardNum() + ", ";
 
-            }
+            r.setStatus(0);
+            k.setStatus(0);
+            Booking booking = new Booking(name, age, r, k);
+            add(booking);
         }
-        card = card.substring(0, back.length()-2);
-        back = back.substring(0, back.length()-2) + " are booked with keycard number " + card;
+
+//        card = card.substring(0, card.length()-2);
+        back = back + " are booked with keycard number " + card;
         return back;
     }
 }
